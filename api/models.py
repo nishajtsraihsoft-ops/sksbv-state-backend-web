@@ -34,3 +34,28 @@ class Notification(models.Model):
 
     def __str__(self):
         return self.title
+
+class DistrictLeader(models.Model):
+    name = models.CharField(max_length=255)
+    designation = models.CharField(max_length=255)
+    district = models.CharField(max_length=255, blank=True, null=True)
+    image = models.ImageField(upload_to='district_leaders/', blank=True, null=True)
+    bio = models.TextField(blank=True, null=True)
+
+    def __str__(self):
+        if self.district:
+            return f"{self.name} - {self.designation} ({self.district})"
+        return f"{self.name} - {self.designation}"
+
+class WorkingCommittee(models.Model):
+    name = models.CharField(max_length=255)
+    designation = models.CharField(max_length=255, blank=True, null=True)
+    district = models.CharField(max_length=255, blank=True, null=True)
+    image = models.ImageField(upload_to='working_committee/', blank=True, null=True)
+    bio = models.TextField(blank=True, null=True)
+
+    def __str__(self):
+        if self.designation:
+            return f"{self.name} - {self.designation}"
+        return self.name
+

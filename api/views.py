@@ -5,8 +5,15 @@ from rest_framework.authtoken.models import Token
 from rest_framework.permissions import IsAuthenticated, AllowAny
 from django.contrib.auth import authenticate
 from django.contrib.auth.models import User
-from .models import Circular, Gallery, Leader, Notification
-from .serializers import CircularSerializer, GallerySerializer, LeaderSerializer, NotificationSerializer
+from .models import Circular, Gallery, Leader, Notification, DistrictLeader, WorkingCommittee
+from .serializers import (
+    CircularSerializer,
+    GallerySerializer,
+    LeaderSerializer,
+    NotificationSerializer,
+    DistrictLeaderSerializer,
+    WorkingCommitteeSerializer,
+)
 
 class CircularViewSet(viewsets.ModelViewSet):
     queryset = Circular.objects.all().order_by('-created_at')
@@ -50,6 +57,29 @@ class NotificationViewSet(viewsets.ModelViewSet):
         if self.action in ['create', 'update', 'partial_update', 'destroy']:
             return [IsAuthenticated()]
         return [AllowAny()]
+
+class DistrictLeaderViewSet(viewsets.ModelViewSet):
+    queryset = DistrictLeader.objects.all()
+    serializer_class = DistrictLeaderSerializer
+    search_fields = ['name', 'designation', 'district']
+    filterset_fields = ['designation', 'district']
+    
+    def get_permissions(self):
+        if self.action in ['create', 'update', 'partial_update', 'destroy']:
+            return [IsAuthenticated()]
+        return [AllowAny()]
+
+class WorkingCommitteeViewSet(viewsets.ModelViewSet):
+    queryset = WorkingCommittee.objects.all()
+    serializer_class = WorkingCommitteeSerializer
+    search_fields = ['name', 'designation', 'district']
+    filterset_fields = ['designation', 'district']
+    
+    def get_permissions(self):
+        if self.action in ['create', 'update', 'partial_update', 'destroy']:
+            return [IsAuthenticated()]
+        return [AllowAny()]
+
 
 @api_view(['POST'])
 def login(request):
